@@ -4,15 +4,16 @@ let todos = [
     {id: 3, text: "Get oil change", complete: false},
     {id: 4, text: "Write thank-you notes", complete: false},
 ];
+
 function getList(){
     var i;
     var count = 0;//keep track of sum of uncompleted tasks
     for(i = 0; i < todos.length; i++){
 		var style;
 		if(todos[i].complete == true){
-			document.getElementById('main-todo-list').innerHTML += '<div class="todo complete" id="'+ (todos[i].id - 1) +'"><span class="todo-text"><input type="checkbox" onclick="checkItem('+ (todos[i].id - 1) + ')" class="todo-checkbox" checked/>'+ todos[i].text +'</span></div>';
+			document.getElementById('main-todo-list').innerHTML += '<div onclick="checkItem('+ (todos[i].id - 1) + ')" class="todo complete" id="'+ (todos[i].id - 1) +'"><span class="todo-text"><input type="checkbox" class="todo-checkbox" checked/>'+ todos[i].text +'</span></div>';
 		}else{
-			document.getElementById('main-todo-list').innerHTML += '<div class="todo" id="'+ (todos[i].id - 1) +'"><span class="todo-text"><input type="checkbox" onclick="checkItem('+ (todos[i].id - 1) + ')" class="todo-checkbox" />'+ todos[i].text +'</span></div>';
+			document.getElementById('main-todo-list').innerHTML += '<div onclick="checkItem('+ (todos[i].id - 1) + ')" class="todo" id="'+ (todos[i].id - 1) +'"><span class="todo-text"><input type="checkbox" class="todo-checkbox" />'+ todos[i].text +'</span></div>';
             count++;
 		}
     }
@@ -27,6 +28,10 @@ function checkItem(e){
     }
     document.getElementById('main-todo-list').innerHTML='';
     getList();
+    count = 0;
+    document.getElementById('main-todo-list').innerHTML='';
+    getList();
+    
 }
 
 var input = document.getElementById("newTodo");
