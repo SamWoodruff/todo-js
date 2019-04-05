@@ -8,8 +8,24 @@ let todos = [
 function getList(){
     var i;
     for(i = 0; i < todos.length; i++){
-		document.getElementById('main-todo-list').innerHTML += '<div class="todo"><span class="todo-text"><input type="checkbox" class="todo-checkbox" />' + todos[i].text + '</span></div>';
+		var style;
+		if(todos[i].complete == true){
+			document.getElementById('main-todo-list').innerHTML += '<div class="todo complete" id="'+ (todos[i].id - 1) +'"><span class="todo-text"><input type="checkbox" onclick="checkItem('+ (todos[i].id - 1) + ')" class="todo-checkbox" checked/>'+ todos[i].text +'</span></div>';
+		}else{
+			document.getElementById('main-todo-list').innerHTML += '<div class="todo" id="'+ (todos[i].id - 1) +'"><span class="todo-text"><input type="checkbox" onclick="checkItem('+ (todos[i].id - 1) + ')" class="todo-checkbox" />'+ todos[i].text +'</span></div>';
+		}
     }
+}
+
+function checkItem(e){
+		var index = e;
+		if (todos[e].complete == false) {
+			todos[e].complete = true;
+			document.getElementById(e).className = "todo complete";
+		}else if (todos[e].complete == true) {
+			todos[e].complete = false;
+			document.getElementById(e).className = "todo";
+		}
 }
 
 window.onload=getList();
