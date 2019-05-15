@@ -63,12 +63,6 @@ function showCompleted(){
     renderTodos();
 }
 
-function checkItem(e){
-	todos[e].complete = !todos[e].complete;
-	renderTodos();
-    
-}
-
 var input = document.getElementById("newTodo");
 input.addEventListener("keyup", function(event) {
     if (event.keyCode === 13){
