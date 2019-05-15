@@ -5,21 +5,49 @@ let todos = [
     {id: 4, text: "Write thank-you notes", complete: false},
 ];
 
-var show = 1;
-function getList(){
-    var i;
-     document.getElementById('main-todo-list').innerHTML='';
-    var count = 0;//keep track of sum of uncompleted tasks
-    for(i = 0; i < todos.length; i++){
-		var style;
-		if(show == 1 && todos[i].complete == true){
-			document.getElementById('main-todo-list').innerHTML += '<div onclick="checkItem('+ (todos[i].id - 1) + ')" class="todo complete" id="'+ (todos[i].id - 1) +'"><span class="todo-text"><input type="checkbox" class="todo-checkbox" checked/>'+ todos[i].text +'</span></div>';
-		}else if(todos[i].complete == false){
-			document.getElementById('main-todo-list').innerHTML += '<div onclick="checkItem('+ (todos[i].id - 1) + ')" class="todo" id="'+ (todos[i].id - 1) +'"><span class="todo-text"><input type="checkbox" class="todo-checkbox" />'+ todos[i].text +'</span></div>';
-            count++;
-		}
+const todoList = document.getElementById('main-todo-list');
+let show = 1;
+
+function renderTodos(){
+    todoList.innerHTML = '';
+    todos.forEach(createTodoDiv);
+    const remaining = todos.reduce((count, todo) => todo.complete ? count : count + 1, 0);
+    document.querySelector('#remaining-count').innerText = remaining;
+
+}
+
+
+function createTodoDiv(todo){
+    if(todo.complete && show == 0){
+        return;
     }
-    document.getElementById("remaining-count").innerHTML = count.toString();
+    
+    const div = document.createElement('div');
+    if(todo.complete){
+        div.className = 'todo complete';
+    }else{
+        div.className = 'todo';
+    }
+
+    const checkbox = document.createElement('input');
+    checkbox.className = 'todo-checkbox';
+    checkbox.type = 'checkbox';
+    checkbox.checked = todo.complete;
+
+    div.appendChild(checkbox);
+
+    const span = document.createElement('span');
+    span.className = 'todo-text';
+    span.innerText = todo.text;
+
+    div.appendChild(span);
+
+    div.addEventListener('click', (event) => {
+        todo.complete = !todo.complete;
+        div.className = 'todo';
+        renderTodos();
+    });
+    todoList.appendChild(div);
 }
 
 function showCompleted(){
@@ -32,16 +60,12 @@ function showCompleted(){
         document.getElementById("status").innerHTML= "Hide completed items";
         show = 1;
     }
-    getList();
+    renderTodos();
 }
 
 function checkItem(e){
-    if (todos[e].complete == false) {//Item is complete
-        todos[e].complete = true;
-    }else if (todos[e].complete == true){//Item is uncomplete
-        todos[e].complete = false;
-    }
-    getList();
+	todos[e].complete = !todos[e].complete;
+	renderTodos();
     
 }
 
@@ -52,7 +76,7 @@ input.addEventListener("keyup", function(event) {
         var todo = document.getElementById("newTodo").value;
         if(todo != ""){
             todos.push({id: (todos.length + 1), text: todo, complete: false});
-            getList();
+            renderTodos();
             document.getElementById("newTodo").value = "";//Reset textbox
         }else{
             alert("You forgot to enter your task!");
@@ -61,4 +85,4 @@ input.addEventListener("keyup", function(event) {
 });
 
 
-window.onload=getList();
+renderTodos();
